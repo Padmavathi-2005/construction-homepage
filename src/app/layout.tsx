@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Urbanist } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import ThemeInitializer from "@/components/ui/ThemeInitializer";
 
-const urbanist = Urbanist({
-  variable: "--font-urbanist",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
   display: "swap",
   weight: ["300", "400", "500", "600", "700", "800", "900"],
@@ -51,12 +51,12 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${urbanist.variable} scroll-smooth`}
+      className={`${dmSans.variable} scroll-smooth`}
     >
       <body
         suppressHydrationWarning
         className="bg-white text-[#111111] antialiased selection:bg-[#f26a1b] selection:text-white overflow-x-hidden min-h-screen"
-        style={{ fontFamily: 'var(--font-urbanist), "Urbanist", -apple-system, BlinkMacSystemFont, sans-serif' }}
+        style={{ fontFamily: 'var(--font-dm-sans), "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif' }}
       >
         <ThemeInitializer />
         <SmoothScroll>{children}</SmoothScroll>
