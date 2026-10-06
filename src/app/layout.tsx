@@ -1,14 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Roboto_Slab } from "next/font/google";
+import { Urbanist } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import ThemeInitializer from "@/components/ui/ThemeInitializer";
 
-const robotoSlab = Roboto_Slab({
-  variable: "--font-roboto-slab",
+const urbanist = Urbanist({
+  variable: "--font-urbanist",
   subsets: ["latin"],
   display: "swap",
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -51,12 +51,12 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${robotoSlab.variable} scroll-smooth`}
+      className={`${urbanist.variable} scroll-smooth`}
     >
       <body
         suppressHydrationWarning
         className="bg-white text-[#111111] antialiased selection:bg-[#f26a1b] selection:text-white overflow-x-hidden min-h-screen"
-        style={{ fontFamily: 'var(--font-roboto-slab), "Roboto Slab", serif' }}
+        style={{ fontFamily: 'var(--font-urbanist), "Urbanist", -apple-system, BlinkMacSystemFont, sans-serif' }}
       >
         <ThemeInitializer />
         <SmoothScroll>{children}</SmoothScroll>

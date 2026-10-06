@@ -163,24 +163,28 @@
     --border-medium: #d4d4d4;
     --border-dark: #111111;
 
-    --font-roboto-slab: var(--font-roboto-slab), "Roboto Slab", serif;
+    --font-urbanist: var(--font-urbanist), "Urbanist", -apple-system, BlinkMacSystemFont, sans-serif;
     --font-montserrat: "Montserrat", -apple-system, BlinkMacSystemFont, sans-serif;
     --font-fragment: "Fragment Mono", monospace;
     --font-coda: "Coda", -apple-system, BlinkMacSystemFont, sans-serif;
     --font-sansation: "Sansation", -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-serif: var(--font-roboto-slab);
-    --font-sans: var(--font-roboto-slab);
+    --font-serif: var(--font-urbanist);
+    --font-sans: var(--font-urbanist);
     --font-mono: var(--font-fragment), monospace;
   }
 
   body {
-    font-family: var(--font-roboto-slab);
+    font-family: var(--font-urbanist);
   }
 }
 
 /* Typography Utility Classes */
+.font-urbanist {
+  font-family: var(--font-urbanist);
+}
+
 .font-roboto-slab {
-  font-family: var(--font-roboto-slab);
+  font-family: var(--font-urbanist);
 }
 
 .font-montserrat {
@@ -200,11 +204,11 @@
 }
 
 .font-serif {
-  font-family: var(--font-roboto-slab);
+  font-family: var(--font-urbanist);
 }
 
 .font-sans {
-  font-family: var(--font-roboto-slab);
+  font-family: var(--font-urbanist);
 }
 
 .font-mono {
