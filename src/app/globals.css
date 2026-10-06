@@ -1,26 +1,312 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ================= MONTSERRAT ARCHITECTURAL TYPEFACE ================= */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/montserrat/montserrat-latin-300-normal.woff2') format('woff2');
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/montserrat/montserrat-latin-400-normal.woff2') format('woff2');
 }
 
-@media (prefers-color-scheme: dark) {
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/montserrat/montserrat-latin-500-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/montserrat/montserrat-latin-600-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/montserrat/montserrat-latin-700-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('/fonts/montserrat/montserrat-latin-800-normal.woff2') format('woff2');
+}
+
+/* ================= FRAGMENT MONO ARCHITECTURAL TYPEFACE ================= */
+@font-face {
+  font-family: 'Fragment Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/fragment-mono/fragment-mono-latin-400-normal.woff2') format('woff2'),
+       url('/fonts/fragment-mono/fragment-mono-latin-400-normal.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Fragment Mono';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/fragment-mono/fragment-mono-latin-400-italic.woff2') format('woff2'),
+       url('/fonts/fragment-mono/fragment-mono-latin-400-italic.woff') format('woff');
+}
+
+/* ================= CODA ARCHITECTURAL TYPEFACE ================= */
+@font-face {
+  font-family: 'Coda';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/coda/coda-latin-400-normal.woff2') format('woff2'),
+       url('/fonts/coda/coda-latin-400-normal.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Coda';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('/fonts/coda/coda-latin-800-normal.woff2') format('woff2'),
+       url('/fonts/coda/coda-latin-800-normal.woff') format('woff');
+}
+
+/* ================= SANSATION ARCHITECTURAL TYPEFACE ================= */
+@font-face {
+  font-family: 'Sansation';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/sansation/sansation-latin-300-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Sansation';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/sansation/sansation-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Sansation';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/sansation/sansation-latin-400-italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Sansation';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/sansation/sansation-latin-700-normal.woff2') format('woff2');
+}
+
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  ::selection {
+    background-color: #f26a1b;
+    color: #ffffff;
+  }
+
+  ::-moz-selection {
+    background-color: #f26a1b;
+    color: #ffffff;
+  }
+
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Primary Brand Color - Deep Structural Navy Blue (from Official Logo) */
+    --primary: #133e63;
+    --primary-hover: #0d2e4a;
+    --primary-light: #1b527e;
+    --primary-glow: rgba(19, 62, 99, 0.25);
+
+    /* Secondary Brand Color - Dynamic Construction Orange (from Official Logo) */
+    --secondary: #f26a1b;
+    --secondary-hover: #d9560b;
+    --secondary-light: #fff2ea;
+    --secondary-border: #fcd7c0;
+
+    --bg-warm-base: #ffffff;
+    --bg-white: #ffffff;
+    --bg-surface: #f8f9fa;
+
+    --text-primary: #050505;
+    --text-secondary: #262626;
+    --text-muted: #525252;
+
+    --accent-metallic: #b88a3b;
+    --accent-metallic-light: #d1a557;
+
+    --border-subtle: #e5e5e5;
+    --border-medium: #d4d4d4;
+    --border-dark: #111111;
+
+    --font-roboto-slab: var(--font-roboto-slab), "Roboto Slab", serif;
+    --font-montserrat: "Montserrat", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-fragment: "Fragment Mono", monospace;
+    --font-coda: "Coda", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-sansation: "Sansation", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-serif: var(--font-roboto-slab);
+    --font-sans: var(--font-roboto-slab);
+    --font-mono: var(--font-fragment), monospace;
+  }
+
+  body {
+    font-family: var(--font-roboto-slab);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Typography Utility Classes */
+.font-roboto-slab {
+  font-family: var(--font-roboto-slab);
 }
+
+.font-montserrat {
+  font-family: var(--font-montserrat);
+}
+
+.font-fragment {
+  font-family: var(--font-fragment);
+}
+
+.font-coda {
+  font-family: var(--font-coda);
+}
+
+.font-sansation {
+  font-family: var(--font-sansation);
+}
+
+.font-serif {
+  font-family: var(--font-roboto-slab);
+}
+
+.font-sans {
+  font-family: var(--font-roboto-slab);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Dynamic Primary Color Helpers */
+.text-primary-color {
+  color: var(--primary);
+}
+
+.bg-primary-color {
+  background-color: var(--primary);
+}
+
+.border-primary-color {
+  border-color: var(--primary);
+}
+
+/* Architectural Grid & Technical Markers */
+.arch-grid-bright {
+  background-image: 
+    linear-gradient(to right, rgba(17, 17, 17, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(17, 17, 17, 0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+.arch-dot-bright {
+  background-image: radial-gradient(rgba(17, 17, 17, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Crisp Clean Panels */
+.clean-panel {
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+}
+
+/* Bright Theme Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d6d6ce;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Lenis Recommended CSS */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ================= 3D MARQUEE ANIMATIONS ================= */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap, 1rem)));
+  }
+}
+
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap, 1rem)));
+  }
+}
+
+.animate-marquee {
+  animation: marquee var(--duration, 35s) linear infinite;
+}
+
+.animate-marquee-vertical {
+  animation: marquee-vertical var(--duration, 35s) linear infinite;
+}
+
