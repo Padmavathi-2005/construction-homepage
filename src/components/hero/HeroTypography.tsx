@@ -32,14 +32,14 @@ function HeroBlock() {
       />
 
       <h1
-        className="font-serif text-white font-normal tracking-[0.03em] text-[28px] sm:text-[38px] md:text-[52px] lg:text-[60px] xl:text-[68px] leading-none whitespace-nowrap"
+        className="font-jost text-white font-normal tracking-[0.03em] text-[28px] sm:text-[38px] md:text-[52px] lg:text-[60px] xl:text-[68px] leading-none whitespace-nowrap"
         style={{ textShadow: "0 2px 14px rgba(0,0,0,0.55), 0 0 2px rgba(0,0,0,0.6)" }}
       >
         {HERO_CONTENT.heading}
       </h1>
 
       <p
-        className="mt-3 sm:mt-4 font-serif text-base sm:text-lg md:text-xl lg:text-[22px] text-white leading-relaxed tracking-[0.02em] max-w-2xl font-light"
+        className="mt-3 sm:mt-4 font-jost text-base sm:text-lg md:text-xl lg:text-[22px] text-white leading-relaxed tracking-[0.02em] max-w-2xl font-light"
         style={{ textShadow: "0 1px 10px rgba(0,0,0,0.55), 0 0 2px rgba(0,0,0,0.5)" }}
       >
         {HERO_CONTENT.subheading}

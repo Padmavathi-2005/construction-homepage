@@ -92,7 +92,7 @@ export function Marquee3D() {
   const renderCard = (img: (typeof images)[0], idx: number) => (
     <div
       key={`${img.id}-${idx}`}
-      className="group/card relative w-56 sm:w-60 md:w-64 aspect-[16/11] rounded-2xl overflow-hidden bg-white shadow-[0_6px_24px_rgba(12,35,64,0.08)] border border-slate-200/90 transition-transform duration-500 ease-out hover:scale-[1.03]"
+      className="group/card relative w-56 sm:w-60 md:w-64 aspect-[16/11] rounded-2xl overflow-hidden bg-[#0d2e4a] shadow-[0_10px_32px_rgba(0,0,0,0.45)] border border-white/20 transition-all duration-500 ease-out hover:scale-[1.04] hover:border-[#F26A1B] hover:shadow-[0_14px_38px_rgba(242,106,27,0.3)]"
     >
       <img
         src={photo(img.id)}
@@ -105,7 +105,7 @@ export function Marquee3D() {
         <span className="font-mono text-[9px] tracking-[0.2em] text-[#F26A1B] uppercase font-semibold mb-0.5">
           {img.category}
         </span>
-        <h4 className="font-serif text-white text-sm sm:text-base font-normal tracking-tight leading-snug">
+        <h4 className="font-jost text-white text-sm sm:text-base font-medium tracking-tight leading-snug">
           {img.title}
         </h4>
       </div>
@@ -156,9 +156,9 @@ export function Marquee3D() {
         </Marquee>
       </div>
 
-      {/* Subtle edge blending at extreme borders */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-6 sm:h-8 bg-gradient-to-b from-white to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 sm:h-8 bg-gradient-to-t from-white to-transparent" />
+      {/* Subtle edge blending at extreme borders into the primary navy background */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-8 sm:h-12 bg-gradient-to-b from-[#133e63] to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 sm:h-12 bg-gradient-to-t from-[#133e63] to-transparent z-10" />
     </div>
   );
 }
