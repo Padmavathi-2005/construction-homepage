@@ -10,8 +10,8 @@ interface HeroProps {
 }
 
 export default function Hero({
-  videoUrl = "/Architectural_construction_timel…_4K_20261006170730.mp4",
-  reverseVideoUrl = "/Architectural_construction_timelapse_reverse.mp4",
+  videoUrl = "/Architectural_construction_timelapse_1080p_fast.mp4",
+  reverseVideoUrl = "/Architectural_construction_timelapse_1080p_fast_reverse.mp4",
   isDraft,
 }: HeroProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -85,7 +85,7 @@ export default function Hero({
     const playForward = (deltaMagnitude = 0) => {
       const fwd = forwardVideoRef.current;
       const rev = reverseVideoRef.current;
-      if (!fwd || !fwd.duration || !isFinite(fwd.duration)) return;
+      if (!fwd) return;
 
       clearTimers();
 
@@ -98,31 +98,29 @@ export default function Hero({
           rev.pause();
         }
 
-        if (rev && rev.duration && isFinite(rev.duration) && rev.duration > 0) {
+        if (rev && rev.duration && isFinite(rev.duration) && rev.duration > 0 && fwd.duration && isFinite(fwd.duration)) {
           const revProgress = rev.currentTime / rev.duration;
           const targetFwdTime = Math.max(0, Math.min(fwd.duration, (1 - revProgress) * fwd.duration));
           fwd.currentTime = targetFwdTime;
         }
       }
 
-      // If at or beyond completion point (generous buffer so scrubbing never stalls)
-      if (fwd.currentTime >= fwd.duration - 0.15 || fwd.ended) {
+      // If at or beyond completion point
+      if (fwd.duration && isFinite(fwd.duration) && (fwd.currentTime >= fwd.duration - 0.12 || fwd.ended)) {
         handleVideoCompletion();
         return;
       }
 
-      // Optional tactile responsive nudge on physical wheel step
-      if (deltaMagnitude > 0) {
-        const scrubStep = Math.min(0.25, Math.max(0.04, (deltaMagnitude / 100) * 0.12));
-        fwd.currentTime = Math.min(fwd.duration - 0.02, fwd.currentTime + scrubStep);
-      }
+      // Responsive playback rate dynamically proportional to wheel delta (instantly snappy)
+      const targetRate = Math.min(2.5, Math.max(1.0, 1.0 + (deltaMagnitude / 120) * 0.7));
+      fwd.playbackRate = targetRate;
 
-      // Play natively forward with GPU hardware decoder
+      // Play natively forward with GPU hardware decoder immediately
       if (fwd.paused) {
         fwd.play().catch(() => {});
       }
 
-      // Debounce inactivity: 150ms of no scroll events -> 2-second grace continuation -> pause
+      // Debounce inactivity: 100ms of no scroll events -> 1.5s grace continuation -> smooth pause
       scrollInactivityTimerRef.current = setTimeout(() => {
         if (twoSecondGraceTimerRef.current) {
           clearTimeout(twoSecondGraceTimerRef.current);
@@ -134,17 +132,17 @@ export default function Hero({
             v.pause();
           }
           twoSecondGraceTimerRef.current = null;
-        }, 2000);
+        }, 1500);
 
         scrollInactivityTimerRef.current = null;
-      }, 150);
+      }, 100);
     };
 
     // Reverse Play: plays dedicated reverse video forward with GPU hardware decoder (100% 60fps smooth!)
     const playReverse = (deltaMagnitude = 0) => {
       const fwd = forwardVideoRef.current;
       const rev = reverseVideoRef.current;
-      if (!rev || !rev.duration || !isFinite(rev.duration)) return;
+      if (!rev) return;
 
       if (heroCompleteRef.current) {
         heroCompleteRef.current = false;
@@ -162,7 +160,7 @@ export default function Hero({
           fwd.pause();
         }
 
-        if (fwd && fwd.duration && isFinite(fwd.duration) && fwd.duration > 0) {
+        if (fwd && fwd.duration && isFinite(fwd.duration) && fwd.duration > 0 && rev.duration && isFinite(rev.duration)) {
           const fwdProgress = fwd.currentTime / fwd.duration;
           const targetRevTime = Math.max(0, Math.min(rev.duration, (1 - fwdProgress) * rev.duration));
           rev.currentTime = targetRevTime;
@@ -170,7 +168,7 @@ export default function Hero({
       }
 
       // Check if reverse is already at the very start of construction (end of reverse video)
-      if (rev.currentTime >= rev.duration - 0.05) {
+      if (rev.duration && isFinite(rev.duration) && rev.currentTime >= rev.duration - 0.08) {
         rev.pause();
         rev.currentTime = rev.duration;
         if (fwd) fwd.currentTime = 0;
@@ -180,18 +178,16 @@ export default function Hero({
         return;
       }
 
-      // Optional tactile responsive nudge on physical wheel step
-      if (deltaMagnitude > 0) {
-        const scrubStep = Math.min(0.25, Math.max(0.04, (deltaMagnitude / 100) * 0.12));
-        rev.currentTime = Math.min(rev.duration - 0.02, rev.currentTime + scrubStep);
-      }
+      // Responsive playback rate dynamically proportional to wheel delta (instantly snappy)
+      const targetRate = Math.min(2.5, Math.max(1.0, 1.0 + (deltaMagnitude / 120) * 0.7));
+      rev.playbackRate = targetRate;
 
       // Play reverse stream natively forward with GPU acceleration (fluid 60fps!)
       if (rev.paused) {
         rev.play().catch(() => {});
       }
 
-      // Debounce inactivity: 150ms of no scroll events -> 2-second grace continuation -> pause
+      // Debounce inactivity: 100ms of no scroll events -> 1.5s grace continuation -> smooth pause
       scrollInactivityTimerRef.current = setTimeout(() => {
         if (twoSecondGraceTimerRef.current) {
           clearTimeout(twoSecondGraceTimerRef.current);
@@ -203,10 +199,10 @@ export default function Hero({
             v.pause();
           }
           twoSecondGraceTimerRef.current = null;
-        }, 2000);
+        }, 1500);
 
         scrollInactivityTimerRef.current = null;
-      }, 150);
+      }, 100);
     };
 
     // Initial setup on mount
@@ -225,7 +221,9 @@ export default function Hero({
         unlockScroll();
       } else {
         heroCompleteRef.current = false;
-        fwdVid.currentTime = 0.001;
+        if (fwdVid.currentTime > 0) {
+          fwdVid.currentTime = 0;
+        }
         fwdVid.pause();
         lockScroll();
       }
@@ -233,7 +231,6 @@ export default function Hero({
 
     if (revVid) {
       revVid.muted = true;
-      revVid.currentTime = revVid.duration || 10;
       revVid.pause();
     }
 
@@ -445,7 +442,7 @@ export default function Hero({
     if (!fwd) return;
     fwd.muted = true;
     if (window.scrollY === 0 && !heroCompleteRef.current) {
-      fwd.currentTime = 0.001;
+      if (fwd.currentTime > 0) fwd.currentTime = 0;
       fwd.pause();
     }
   };
@@ -454,10 +451,7 @@ export default function Hero({
     const rev = reverseVideoRef.current;
     if (!rev) return;
     rev.muted = true;
-    if (rev.duration && isFinite(rev.duration)) {
-      rev.currentTime = rev.duration;
-      rev.pause();
-    }
+    rev.pause();
   };
 
   return (
