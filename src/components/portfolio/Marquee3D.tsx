@@ -92,7 +92,7 @@ export function Marquee3D() {
   const renderCard = (img: (typeof images)[0], idx: number) => (
     <div
       key={`${img.id}-${idx}`}
-      className="group/card relative w-56 sm:w-60 md:w-64 aspect-[16/11] rounded-2xl overflow-hidden bg-[#0d2e4a] shadow-md border border-white/15 transition-all duration-500 ease-out hover:scale-[1.03] hover:border-[#F26A1B]"
+      className="group/card relative w-56 sm:w-60 md:w-64 aspect-[16/11] rounded-2xl overflow-hidden bg-[#0d2e4a] border border-white/20 transition-all duration-500 ease-out hover:scale-[1.03] hover:border-[#F26A1B]"
     >
       <img
         src={photo(img.id)}
