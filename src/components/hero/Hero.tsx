@@ -10,7 +10,7 @@ interface HeroProps {
 }
 
 export default function Hero({
-  videoUrl = "/Architectural_construction_timelapse_forward.mp4",
+  videoUrl = "/Architectural_construction_timel…_4K_20261006170730.mp4",
   reverseVideoUrl = "/Architectural_construction_timelapse_reverse.mp4",
   isDraft,
 }: HeroProps) {
