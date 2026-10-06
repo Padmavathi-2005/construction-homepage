@@ -10,8 +10,8 @@ interface HeroProps {
 }
 
 export default function Hero({
-  videoUrl = "/Architectural_construction_timelapse_1080p_fast.mp4",
-  reverseVideoUrl = "/Architectural_construction_timelapse_1080p_fast_reverse.mp4",
+  videoUrl = "/hero-construction-stream.mp4",
+  reverseVideoUrl = "/hero-construction-stream-reverse.mp4",
   isDraft,
 }: HeroProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -81,11 +81,16 @@ export default function Hero({
       unlockScroll();
     };
 
-    // Forward Play: native hardware-accelerated playback
+    // Forward Play: native hardware-accelerated playback with instant responsive velocity
     const playForward = (deltaMagnitude = 0) => {
       const fwd = forwardVideoRef.current;
       const rev = reverseVideoRef.current;
       if (!fwd) return;
+
+      // Lazy-load reverse video on first user interaction so initial page load is 100% instant
+      if (rev && rev.preload !== "auto") {
+        rev.preload = "auto";
+      }
 
       clearTimers();
 
@@ -105,22 +110,28 @@ export default function Hero({
         }
       }
 
-      // If at or beyond completion point
-      if (fwd.duration && isFinite(fwd.duration) && (fwd.currentTime >= fwd.duration - 0.12 || fwd.ended)) {
+      // If near completion (generous threshold so user never feels stuck at the end)
+      if (fwd.duration && isFinite(fwd.duration) && (fwd.currentTime >= fwd.duration - 0.35 || fwd.ended)) {
         handleVideoCompletion();
         return;
       }
 
-      // Responsive playback rate dynamically proportional to wheel delta (instantly snappy)
-      const targetRate = Math.min(2.5, Math.max(1.0, 1.0 + (deltaMagnitude / 120) * 0.7));
+      // Responsive scrub step: 1 wheel tick advances 0.6s to 1.4s of video (instant visual progress)
+      if (deltaMagnitude > 0 && fwd.duration && isFinite(fwd.duration)) {
+        const scrubStep = Math.min(1.4, Math.max(0.35, (deltaMagnitude / 100) * 0.75));
+        fwd.currentTime = Math.min(fwd.duration - 0.05, fwd.currentTime + scrubStep);
+      }
+
+      // Play at 2.5x - 3.2x speed for rapid, energetic construction timelapse
+      const targetRate = Math.min(3.5, Math.max(2.2, 1.8 + (deltaMagnitude / 100) * 0.8));
       fwd.playbackRate = targetRate;
 
-      // Play natively forward with GPU hardware decoder immediately
+      // Play immediately with GPU hardware decoder
       if (fwd.paused) {
         fwd.play().catch(() => {});
       }
 
-      // Debounce inactivity: 100ms of no scroll events -> 1.5s grace continuation -> smooth pause
+      // Debounce inactivity: 120ms pause debounce
       scrollInactivityTimerRef.current = setTimeout(() => {
         if (twoSecondGraceTimerRef.current) {
           clearTimeout(twoSecondGraceTimerRef.current);
@@ -132,13 +143,13 @@ export default function Hero({
             v.pause();
           }
           twoSecondGraceTimerRef.current = null;
-        }, 1500);
+        }, 800);
 
         scrollInactivityTimerRef.current = null;
-      }, 100);
+      }, 120);
     };
 
-    // Reverse Play: plays dedicated reverse video forward with GPU hardware decoder (100% 60fps smooth!)
+    // Reverse Play: plays dedicated reverse video forward with GPU hardware decoder (instant & snappy)
     const playReverse = (deltaMagnitude = 0) => {
       const fwd = forwardVideoRef.current;
       const rev = reverseVideoRef.current;
@@ -167,8 +178,8 @@ export default function Hero({
         }
       }
 
-      // Check if reverse is already at the very start of construction (end of reverse video)
-      if (rev.duration && isFinite(rev.duration) && rev.currentTime >= rev.duration - 0.08) {
+      // Check if reverse reached start of construction
+      if (rev.duration && isFinite(rev.duration) && rev.currentTime >= rev.duration - 0.35) {
         rev.pause();
         rev.currentTime = rev.duration;
         if (fwd) fwd.currentTime = 0;
@@ -178,16 +189,22 @@ export default function Hero({
         return;
       }
 
-      // Responsive playback rate dynamically proportional to wheel delta (instantly snappy)
-      const targetRate = Math.min(2.5, Math.max(1.0, 1.0 + (deltaMagnitude / 120) * 0.7));
+      // Responsive scrub step: 1 wheel tick rewinds 0.6s to 1.4s of video
+      if (deltaMagnitude > 0 && rev.duration && isFinite(rev.duration)) {
+        const scrubStep = Math.min(1.4, Math.max(0.35, (deltaMagnitude / 100) * 0.75));
+        rev.currentTime = Math.min(rev.duration - 0.05, rev.currentTime + scrubStep);
+      }
+
+      // Play at 2.5x - 3.2x speed for rapid, fluid rewind
+      const targetRate = Math.min(3.5, Math.max(2.2, 1.8 + (deltaMagnitude / 100) * 0.8));
       rev.playbackRate = targetRate;
 
-      // Play reverse stream natively forward with GPU acceleration (fluid 60fps!)
+      // Play reverse stream immediately
       if (rev.paused) {
         rev.play().catch(() => {});
       }
 
-      // Debounce inactivity: 100ms of no scroll events -> 1.5s grace continuation -> smooth pause
+      // Debounce inactivity: 120ms pause debounce
       scrollInactivityTimerRef.current = setTimeout(() => {
         if (twoSecondGraceTimerRef.current) {
           clearTimeout(twoSecondGraceTimerRef.current);
@@ -199,10 +216,10 @@ export default function Hero({
             v.pause();
           }
           twoSecondGraceTimerRef.current = null;
-        }, 1500);
+        }, 800);
 
         scrollInactivityTimerRef.current = null;
-      }, 100);
+      }, 120);
     };
 
     // Initial setup on mount
@@ -464,6 +481,7 @@ export default function Hero({
       <video
         ref={forwardVideoRef}
         src={videoUrl}
+        poster="/hero-poster.webp"
         preload="auto"
         muted
         playsInline
@@ -481,7 +499,8 @@ export default function Hero({
       <video
         ref={reverseVideoRef}
         src={reverseVideoUrl}
-        preload="auto"
+        poster="/hero-poster.webp"
+        preload="none"
         muted
         playsInline
         autoPlay={false}
