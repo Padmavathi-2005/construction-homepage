@@ -81,7 +81,7 @@ export default function Hero({
       unlockScroll();
     };
 
-    // Forward Play: native hardware-accelerated playback with instant responsive velocity
+    // Forward Play: native hardware-accelerated playback at natural 1x speed with instant trigger
     const playForward = (deltaMagnitude = 0) => {
       const fwd = forwardVideoRef.current;
       const rev = reverseVideoRef.current;
@@ -111,27 +111,20 @@ export default function Hero({
       }
 
       // If near completion (generous threshold so user never feels stuck at the end)
-      if (fwd.duration && isFinite(fwd.duration) && (fwd.currentTime >= fwd.duration - 0.35 || fwd.ended)) {
+      if (fwd.duration && isFinite(fwd.duration) && (fwd.currentTime >= fwd.duration - 0.2 || fwd.ended)) {
         handleVideoCompletion();
         return;
       }
 
-      // Responsive scrub step: 1 wheel tick advances 0.6s to 1.4s of video (instant visual progress)
-      if (deltaMagnitude > 0 && fwd.duration && isFinite(fwd.duration)) {
-        const scrubStep = Math.min(1.4, Math.max(0.35, (deltaMagnitude / 100) * 0.75));
-        fwd.currentTime = Math.min(fwd.duration - 0.05, fwd.currentTime + scrubStep);
-      }
+      // Standard natural 1x cinematic playback speed
+      fwd.playbackRate = 1.0;
 
-      // Play at 2.5x - 3.2x speed for rapid, energetic construction timelapse
-      const targetRate = Math.min(3.5, Math.max(2.2, 1.8 + (deltaMagnitude / 100) * 0.8));
-      fwd.playbackRate = targetRate;
-
-      // Play immediately with GPU hardware decoder
+      // Trigger and play immediately with zero delay
       if (fwd.paused) {
         fwd.play().catch(() => {});
       }
 
-      // Debounce inactivity: 120ms pause debounce
+      // Inactivity debounce: 150ms no scroll -> 1.0s grace continuation -> smooth pause
       scrollInactivityTimerRef.current = setTimeout(() => {
         if (twoSecondGraceTimerRef.current) {
           clearTimeout(twoSecondGraceTimerRef.current);
@@ -143,13 +136,13 @@ export default function Hero({
             v.pause();
           }
           twoSecondGraceTimerRef.current = null;
-        }, 800);
+        }, 1000);
 
         scrollInactivityTimerRef.current = null;
-      }, 120);
+      }, 150);
     };
 
-    // Reverse Play: plays dedicated reverse video forward with GPU hardware decoder (instant & snappy)
+    // Reverse Play: plays dedicated reverse video at natural 1x speed with instant trigger
     const playReverse = (deltaMagnitude = 0) => {
       const fwd = forwardVideoRef.current;
       const rev = reverseVideoRef.current;
@@ -179,7 +172,7 @@ export default function Hero({
       }
 
       // Check if reverse reached start of construction
-      if (rev.duration && isFinite(rev.duration) && rev.currentTime >= rev.duration - 0.35) {
+      if (rev.duration && isFinite(rev.duration) && rev.currentTime >= rev.duration - 0.2) {
         rev.pause();
         rev.currentTime = rev.duration;
         if (fwd) fwd.currentTime = 0;
@@ -189,22 +182,15 @@ export default function Hero({
         return;
       }
 
-      // Responsive scrub step: 1 wheel tick rewinds 0.6s to 1.4s of video
-      if (deltaMagnitude > 0 && rev.duration && isFinite(rev.duration)) {
-        const scrubStep = Math.min(1.4, Math.max(0.35, (deltaMagnitude / 100) * 0.75));
-        rev.currentTime = Math.min(rev.duration - 0.05, rev.currentTime + scrubStep);
-      }
+      // Standard natural 1x cinematic playback speed
+      rev.playbackRate = 1.0;
 
-      // Play at 2.5x - 3.2x speed for rapid, fluid rewind
-      const targetRate = Math.min(3.5, Math.max(2.2, 1.8 + (deltaMagnitude / 100) * 0.8));
-      rev.playbackRate = targetRate;
-
-      // Play reverse stream immediately
+      // Trigger and play reverse stream immediately with zero delay
       if (rev.paused) {
         rev.play().catch(() => {});
       }
 
-      // Debounce inactivity: 120ms pause debounce
+      // Inactivity debounce: 150ms no scroll -> 1.0s grace continuation -> smooth pause
       scrollInactivityTimerRef.current = setTimeout(() => {
         if (twoSecondGraceTimerRef.current) {
           clearTimeout(twoSecondGraceTimerRef.current);
@@ -216,10 +202,10 @@ export default function Hero({
             v.pause();
           }
           twoSecondGraceTimerRef.current = null;
-        }, 800);
+        }, 1000);
 
         scrollInactivityTimerRef.current = null;
-      }, 120);
+      }, 150);
     };
 
     // Initial setup on mount
