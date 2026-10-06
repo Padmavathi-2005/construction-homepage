@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { scrollToSection } from "@/lib/scroll";
 
 export interface ProjectShowcaseItem {
@@ -88,6 +88,110 @@ export const SHOWCASE_PROJECTS: ProjectShowcaseItem[] = [
   },
 ];
 
+// Mobile-only: simple swipeable carousel with scroll-snap, autoplay and dots
+function MobileShowcaseCarousel() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const pausedRef = useRef(false);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const N = SHOWCASE_PROJECTS.length;
+
+  const goTo = (idx: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = track.children[idx] as HTMLElement | undefined;
+    if (!card) return;
+    track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: "smooth" });
+  };
+
+  // Track the active slide from scroll position
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const onScroll = () => {
+      const first = track.children[0] as HTMLElement | undefined;
+      if (!first) return;
+      const step = first.offsetWidth + 12; // card width + gap
+      setActive(Math.max(0, Math.min(N - 1, Math.round(track.scrollLeft / step))));
+    };
+    track.addEventListener("scroll", onScroll, { passive: true });
+    return () => track.removeEventListener("scroll", onScroll);
+  }, [N]);
+
+  // Autoplay every 3.5s; pauses while the user is touching
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (pausedRef.current) return;
+      setActive((prev) => {
+        const next = (prev + 1) % N;
+        goTo(next);
+        return next;
+      });
+    }, 3500);
+    return () => clearInterval(id);
+  }, [N]);
+
+  const pause = () => {
+    pausedRef.current = true;
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+  };
+  const resumeLater = () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      pausedRef.current = false;
+    }, 4000);
+  };
+
+  return (
+    <div className="md:hidden w-full pr-6 sm:pr-10 pb-10">
+      <div
+        ref={trackRef}
+        onTouchStart={pause}
+        onTouchEnd={resumeLater}
+        className="flex gap-3 overflow-x-auto snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {SHOWCASE_PROJECTS.map((project) => (
+          <div key={project.id} className="snap-start shrink-0 w-[85%]">
+            <div className="relative w-full aspect-[16/10] overflow-hidden rounded-2xl border border-[#E8DFC8]/80 bg-black/[0.02]">
+              <img
+                src={project.image}
+                alt={project.alt}
+                loading="lazy"
+                className="w-full h-full object-cover select-none"
+              />
+              <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/60 to-transparent">
+                <p className="font-jost text-white text-sm font-medium tracking-wide">{project.title}</p>
+                <p className="font-mono text-[10px] tracking-wider text-white/80 uppercase">
+                  {project.location} · {project.year}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Dots */}
+      <div className="flex justify-center gap-1.5 mt-4">
+        {SHOWCASE_PROJECTS.map((p, idx) => (
+          <button
+            key={p.id}
+            type="button"
+            aria-label={`Show project ${idx + 1}`}
+            onClick={() => {
+              pause();
+              goTo(idx);
+              resumeLater();
+            }}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              active === idx ? "w-6 bg-[#F26A1B]" : "w-1.5 bg-[#133E63]/25"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function ArchitectureShowcase() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const leftColRef = useRef<HTMLDivElement>(null);
@@ -160,6 +264,12 @@ export default function ArchitectureShowcase() {
     const updateMotion = (timestamp: number) => {
       const delta = (timestamp - lastTime) / 1000;
       lastTime = timestamp;
+
+      // Arc stage is hidden on mobile (< 768px) — skip all layout work there
+      if (cachedWinW < 768) {
+        rafIdRef.current = requestAnimationFrame(updateMotion);
+        return;
+      }
 
       // Clamp delta if tab was inactive to avoid large jumps
       const safeDelta = Math.min(delta, 0.1);
@@ -452,10 +562,13 @@ export default function ArchitectureShowcase() {
             </div>
           </div>
 
-          {/* ================= RIGHT COLUMN: CIRCULAR ARCHITECTURAL SHOWCASE STAGE ================= */}
+          {/* ================= MOBILE ONLY: SIMPLE SWIPE CAROUSEL ================= */}
+          <MobileShowcaseCarousel />
+
+          {/* ================= TABLET / DESKTOP / TV: CIRCULAR ARCHITECTURAL SHOWCASE STAGE ================= */}
           <div
             ref={viewportRef}
-            className="lg:col-span-7 xl:col-span-7 2xl:col-span-7 relative h-[560px] sm:h-[620px] lg:h-[680px] xl:h-[720px] w-full flex items-center justify-center overflow-hidden mb-0 pb-0"
+            className="hidden md:flex lg:col-span-7 xl:col-span-7 2xl:col-span-7 relative h-[620px] lg:h-[680px] xl:h-[720px] w-full items-center justify-center overflow-hidden mb-0 pb-0"
           >
             {/* ================= HERO LOGO DESTINATION DOCK ================= */}
             <div
