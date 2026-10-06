@@ -12,6 +12,9 @@ const robotoSlab = Roboto_Slab({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://construction.sangvish.com"
+  ),
   title: "Amogha Construction & Infrastructure | Building the Future",
   description:
     "Building with precision, quality, and commitment. Amogha Construction & Infrastructure specializes in luxury developments, civil infrastructure, and sustainable construction engineering.",
