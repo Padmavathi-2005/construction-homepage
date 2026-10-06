@@ -28,7 +28,7 @@ function HeroBlock() {
         id="hero-logo-origin"
         src="/images/amogha-logo-light.png"
         alt="Amogha Construction & Infrastructure"
-        className="h-20 sm:h-24 md:h-28 w-auto object-contain mb-5 sm:mb-6 drop-shadow-[0_4px_18px_rgba(0,0,0,0.5)] transition-opacity duration-300"
+        className="h-20 sm:h-24 md:h-28 w-auto object-contain mb-5 sm:mb-6 drop-shadow-[0_4px_18px_rgba(0,0,0,0.5)]"
       />
 
       <h1

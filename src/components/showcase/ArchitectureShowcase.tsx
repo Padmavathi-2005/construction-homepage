@@ -464,6 +464,7 @@ export default function ArchitectureShowcase() {
             >
               <div
                 id="hero-logo-dock-content"
+                style={{ opacity: 0 }}
                 className="flex flex-col items-center justify-center transition-transform duration-300 hover:scale-[1.03]"
               >
                 <img
