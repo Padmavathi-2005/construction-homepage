@@ -16,9 +16,9 @@ export default function PortfolioSection() {
         <Marquee3D />
       </div>
 
-      {/* ================= CENTER MIDDLE OVERLAY HEADING ================= */}
-      <div className="relative z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-        <h2 className="font-jost text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[96px] font-normal text-white tracking-[-0.01em] leading-none [text-shadow:_0_2px_12px_rgba(0,0,0,0.35)] pointer-events-auto select-text">
+      {/* ================= CENTER FULL-WIDTH PRIMARY COLOR BANNER ================= */}
+      <div className="relative z-20 w-full py-5 sm:py-6 lg:py-7 bg-[#133e63] border-y border-[#1b527e]/70 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex items-center justify-center text-center pointer-events-auto select-text">
+        <h2 className="font-jost text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-normal text-white tracking-[-0.01em] leading-none">
           Our Portfolio
         </h2>
       </div>
