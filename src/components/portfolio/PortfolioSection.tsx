@@ -24,7 +24,7 @@ export default function PortfolioSection() {
 
       {/* ================= CENTER MIDDLE OVERLAY HEADING ================= */}
       <div className="relative z-20 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
-        <h2 className="font-jost text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[96px] font-semibold text-white tracking-[-0.02em] leading-none [text-shadow:_0_4px_24px_rgba(0,0,0,0.85),_0_2px_6px_rgba(0,0,0,0.95)] pointer-events-auto select-text">
+        <h2 className="font-jost text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[96px] font-normal text-white tracking-[-0.01em] leading-none pointer-events-auto select-text">
           Our Portfolio
         </h2>
       </div>
