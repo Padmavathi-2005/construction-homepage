@@ -53,10 +53,18 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${jost.variable} scroll-smooth`}
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body
         suppressHydrationWarning
         className="bg-white text-[#111111] antialiased selection:bg-[#f26a1b] selection:text-white overflow-x-hidden min-h-screen"
-        style={{ fontFamily: 'var(--font-jost), "Jost", -apple-system, BlinkMacSystemFont, sans-serif' }}
+        style={{ fontFamily: '"Jost", var(--font-jost), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}
       >
         <ThemeInitializer />
         <SmoothScroll>{children}</SmoothScroll>
