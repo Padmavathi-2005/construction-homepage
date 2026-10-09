@@ -3,6 +3,7 @@ import { Jost } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import ThemeInitializer from "@/components/ui/ThemeInitializer";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
 const jost = Jost({
   variable: "--font-jost",
@@ -68,6 +69,7 @@ export default function RootLayout({
       >
         <ThemeInitializer />
         <SmoothScroll>{children}</SmoothScroll>
+        <WhatsAppButton />
       </body>
     </html>
   );

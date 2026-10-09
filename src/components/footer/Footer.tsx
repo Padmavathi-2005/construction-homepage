@@ -129,8 +129,18 @@ export default function Footer() {
         </div>
 
         {/* ================= BOTTOM BAR ================= */}
-        <div className="pt-6 flex items-center justify-center text-[11px] font-mono text-[#93B0CC]">
-          <p>© {new Date().getFullYear()} COMPANY NAME. ALL RIGHTS RESERVED.</p>
+        <div className="pt-6 w-full flex items-center justify-center text-center text-xs sm:text-[13px] font-mono text-[#93B0CC]">
+          <p className="flex items-center justify-center gap-1.5">
+            <span>Designed and Developed by</span>
+            <a
+              href="https://sangvish.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#FF8A45] hover:text-white font-medium underline underline-offset-4 decoration-[#FF8A45]/40 hover:decoration-white transition-colors duration-200"
+            >
+              Sangvish Technologies
+            </a>
+          </p>
         </div>
       </div>
     </footer>
